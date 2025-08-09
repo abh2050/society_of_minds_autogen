@@ -1,8 +1,7 @@
 # Society of Mind AutoGen Implementation
 ![](https://i.ytimg.com/vi/n3G9xnHeJEk/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBZYeWqQ8a3os8MKJlT8clIiOMWvw)
 
-**Implimentation: UserProxyAgent Integration in SoM Teams**  
-**Microsoft AutoGen Framework - Academic Submission**
+**Implimentation: UserProxyAgent Integration in SoM Teams** 
 
 ## 🎯 Project Overview
 
