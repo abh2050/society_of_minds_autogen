@@ -191,41 +191,188 @@ Research Team  Development Team
 └── 6. Milestone Achievement Validation
 ```
 
-### 📈 Workflow Sequence Diagram
+### 📈 Actual Implementation Workflow Sequence
 
 ```
-Executive     Outer Team     Research Team     Development Team
-Supervisor    Coordinator    Human            Human
-    │             │              │                 │
-    │◄────────────┤              │                 │  1. Strategic Task Assignment
-    │             │              │                 │
-    │─────────────►│              │                 │  2. Approve & Delegate
-    │             │              │                 │
-    │             ├──────────────►│                 │  3. Research Task Assignment
-    │             │              │                 │
-    │             │              │◄────────────────┤  4. Technical Requirements
-    │             │              │                 │
-    │             │              │─────────────────►│  5. Approve Research Direction
-    │             │              │                 │
-    │             │              │                 │
-    │             │◄─────────────┤                 │  6. Research Progress Report
-    │             │              │                 │
-    │             │              │                 ├─►7. Architecture Proposal
-    │             │              │                 │
-    │             │◄─────────────┤                 │  8. Integration Requirements
-    │             │              │                 │
-    │◄────────────┤              │                 │  9. Executive Review Required
-    │             │              │                 │
-    │─────────────►│              │                 │  10. Strategic Approval
-    │             │              │                 │
-    │             ├──────────────►│                 │  11. Final Research Validation
-    │             │              │                 │
-    │             │              │                 ├─►12. Implementation Approval
-    │             │              │                 │
-    │             │◄─────────────┴─────────────────┤  13. Integrated Deliverable
-    │             │                                 │
-    │◄────────────┤                                 │  14. Final Executive Approval
-    │             │                                 │
+SoMArchitecture      Research Team      Development Team     Outer Team
+    Main                Human               Human           Executive
+     │                    │                   │               │
+     │                    │                   │               │
+     ├─── Task Assignment ────────────────────►│               │
+     │                    │                   │               │  1. Research task direct assignment
+     │                    │                   │               │     🔴 Human Gate — Task initiation approval (Research)
+     │                    │◄──────────────────┤               │
+     │                    │   Approved        │               │  2. Research team human approval
+     │                    │                   │               │
+     │                    │                   │               │
+     ├─── Task Assignment ─────────────────────────────────────►│
+     │                    │                   │               │  3. Development task direct assignment  
+     │                    │                   │               │     🔴 Human Gate — Task initiation approval (Dev)
+     │                    │                   │◄──────────────┤
+     │                    │                   │   Approved    │  4. Development team human approval
+     │                    │                   │               │
+     │                    │                   │               │
+     ├─── Coordination Task ──────────────────────────────────────────────────────►│
+     │                    │                   │               │                    │  5. Outer team coordination task
+     │                    │                   │               │                    │     🔴 Human Gate — Executive coordination approval
+     │                    │                   │               │◄───────────────────┤
+     │                    │                   │               │      Approved      │  6. Executive supervisor approval
+     │                    │                   │               │                    │
+     │◄─── Workflow Complete ────────────────────────────────────────────────────────┤
+     │                    │                   │               │                    │  7. Complete SoM workflow finished
+     │                    │                   │               │                    │
+```
+
+### 🔴 Actual Human Gates in Implementation
+
+| Step | Gate Type | Decision Point | Approver | Code Reference |
+|------|-----------|----------------|----------|----------------|
+| 1 | Inner Team | Research task initiation | Research_Team_Human | `InnerTeamManager.execute_workflow()` |
+| 3 | Inner Team | Development task initiation | Development_Team_Human | `InnerTeamManager.execute_workflow()` |
+| 5 | Outer Team | Executive coordination | Executive_Supervisor | `OuterTeamManager.execute_coordination()` |
+
+### 🏗️ Code Implementation Flow
+
+```python
+# In demonstrate_som_workflow():
+research_team.execute_workflow(research_task)        # Human Gate 1
+development_team.execute_workflow(development_task)  # Human Gate 2  
+outer_team.execute_coordination(coordination_task)   # Human Gate 3
+
+# Each execute_workflow() triggers:
+human_proxy.initiate_chat(chat_manager, approval_message)
+
+# execute_coordination() triggers:
+executive_supervisor.initiate_chat(chat_manager, executive_message)
+```
+
+## 🎨 Mermaid Diagrams
+
+### 📊 Simple Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    participant SOM as SoMArchitecture<br/>Main
+    participant RTH as Research Team<br/>Human (UserProxy)
+    participant DTH as Development Team<br/>Human (UserProxy)
+    participant ES as Executive<br/>Supervisor (UserProxy)
+
+    Note over SOM: demonstrate_som_workflow()
+    
+    SOM->>RTH: 1. Research Task Assignment
+    Note right of RTH: 🔴 Human Gate<br/>Task initiation approval
+    RTH-->>SOM: 2. Research Approved
+    
+    SOM->>DTH: 3. Development Task Assignment  
+    Note right of DTH: 🔴 Human Gate<br/>Task initiation approval
+    DTH-->>SOM: 4. Development Approved
+    
+    SOM->>ES: 5. Coordination Task Assignment
+    Note right of ES: 🔴 Human Gate<br/>Executive coordination
+    ES-->>SOM: 6. Executive Approved
+    
+    Note over SOM: 7. Complete SoM Workflow Finished
+```
+
+### 🔄 Detailed Agent Interaction Diagram
+
+```mermaid
+sequenceDiagram
+    participant SOM as SoMArchitecture
+    participant RTH as Research Team Human
+    participant RA as Research Analyst
+    participant DV as Data Validator
+    participant SA as Strategy Advisor
+    participant DTH as Dev Team Human
+    participant TA as Technical Architect
+    participant IP as Implementation Planner
+    participant QA as Quality Assurance
+    participant ES as Executive Supervisor
+    participant TC as Team Coordinator
+    participant RM as Resource Manager
+    participant OV as Output Validator
+
+    Note over SOM: Main Workflow Start
+    
+    rect rgb(255, 240, 240)
+        Note over SOM, SA: Research Team Workflow
+        SOM->>RTH: execute_workflow(research_task)
+        Note right of RTH: 🔴 HUMAN APPROVAL REQUIRED
+        RTH->>RA: Task approved, begin research
+        RA->>DV: Collaborate on data validation
+        DV->>SA: Validate strategic recommendations
+        SA-->>RTH: Research insights complete
+    end
+    
+    rect rgb(240, 255, 240)
+        Note over SOM, QA: Development Team Workflow  
+        SOM->>DTH: execute_workflow(development_task)
+        Note right of DTH: 🔴 HUMAN APPROVAL REQUIRED
+        DTH->>TA: Task approved, design architecture
+        TA->>IP: Collaborate on implementation plan
+        IP->>QA: Ensure quality standards
+        QA-->>DTH: Technical plan complete
+    end
+    
+    rect rgb(240, 240, 255)
+        Note over SOM, OV: Executive Coordination
+        SOM->>ES: execute_coordination(coordination_task)
+        Note right of ES: 🔴 EXECUTIVE DECISION REQUIRED
+        ES->>TC: Strategic guidance approved
+        TC->>RM: Coordinate resource allocation
+        RM->>OV: Validate integrated output
+        OV-->>ES: Final deliverable ready
+    end
+    
+    Note over SOM: ✅ Society of Mind Demo Complete
+```
+
+### 🏗️ Architecture Flow Diagram
+
+```mermaid
+flowchart TD
+    SOM[SoMArchitecture Main] 
+    
+    subgraph RT[Research Team]
+        RTH[Research Team Human<br/>🔴 UserProxyAgent]
+        RA[Research Analyst]
+        DV[Data Validator] 
+        SA[Strategy Advisor]
+    end
+    
+    subgraph DT[Development Team]
+        DTH[Dev Team Human<br/>🔴 UserProxyAgent]
+        TA[Technical Architect]
+        IP[Implementation Planner]
+        QA[Quality Assurance]
+    end
+    
+    subgraph OT[Outer Team Coordination]
+        ES[Executive Supervisor<br/>🔴 UserProxyAgent]
+        TC[Team Coordinator]
+        RM[Resource Manager]
+        OV[Output Validator]
+    end
+    
+    SOM -->|1. execute_workflow| RTH
+    SOM -->|2. execute_workflow| DTH  
+    SOM -->|3. execute_coordination| ES
+    
+    RTH -.->|supervises| RA
+    RTH -.->|supervises| DV
+    RTH -.->|supervises| SA
+    
+    DTH -.->|supervises| TA
+    DTH -.->|supervises| IP
+    DTH -.->|supervises| QA
+    
+    ES -.->|supervises| TC
+    ES -.->|supervises| RM
+    ES -.->|supervises| OV
+    
+    style RTH fill:#ffcccc
+    style DTH fill:#ccffcc  
+    style ES fill:#ccccff
 ```
 
 ### 🎯 Decision Flow Matrix
